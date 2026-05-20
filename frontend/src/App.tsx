@@ -1,122 +1,114 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+// ==========================================
+// src/App.tsx
+// ==========================================
 
-function App() {
-  const [count, setCount] = useState(0)
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import Hero from "./components/Hero";
+import HowItWorks from "./components/HowItWorks";
+import FeaturesSection from "./components/FeaturesSection";
+import CtaBanner from "./components/CtaBanner";
+
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Home from "./pages/Home";
+import Dashboard from "./pages/Dashboard";
+import SuperAdmin from "./pages/SuperAdmin";
+import About from "./pages/About";
+import Help from "./pages/Help";
+
+// ==========================================
+// LANDING PAGE
+// ==========================================
+
+function LandingPage() {
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="overflow-x-hidden bg-[#F4F9FF] min-h-screen">
 
-      <div className="ticks"></div>
+      {/* NAVBAR */}
+      <Navbar />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      {/* HERO */}
+      <Hero />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+      {/* FEATURES */}
+      <FeaturesSection />
+
+      {/* HOW IT WORKS */}
+      <HowItWorks />
+
+      {/* CTA */}
+      <CtaBanner />
+
+      {/* FOOTER */}
+      <Footer />
+
+    </div>
+  );
 }
 
-export default App
+// ==========================================
+// APP
+// ==========================================
+
+export default function App() {
+  return (
+    <BrowserRouter>
+
+      <Routes>
+
+        {/* LANDING PAGE */}
+        <Route
+          path="/"
+          element={<LandingPage />}
+        />
+
+        {/* HOME */}
+        <Route
+          path="/home"
+          element={<Home />}
+        />
+
+        {/* LOGIN */}
+        <Route
+          path="/login"
+          element={<Login />}
+        />
+
+        {/* REGISTER */}
+        <Route
+          path="/register"
+          element={<Register />}
+        />
+
+        {/* DASHBOARD */}
+        <Route
+          path="/dashboard"
+          element={<Dashboard />}
+        />
+
+        {/* SUPER ADMIN */}
+        <Route
+          path="/superadmin"
+          element={<SuperAdmin />}
+        />
+
+        {/* ABOUT */}
+        <Route
+          path="/about"
+          element={<About />}
+        />
+
+        {/* HELP */}
+        <Route
+          path="/help"
+          element={<Help />}
+        />
+
+      </Routes>
+
+    </BrowserRouter>
+  );
+}
