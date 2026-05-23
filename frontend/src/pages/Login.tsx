@@ -18,30 +18,39 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    let role = "user";
-    let name = "Pengguna";
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    if (email === "superadmin@example.com") {
-      role = "super_admin";
-      name = "Super Administrator";
-    } else if (email === "admin@example.com") {
-      role = "admin";
-      name = "Administrator";
-    }
+      const data = await response.json();
 
-    // simpan data user dummy ke localStorage
-    localStorage.setItem("user", JSON.stringify({ name, email, role }));
+      if (!response.ok) {
+        alert(data.message || "Login gagal");
+        return;
+      }
 
-    // pindah halaman berdasarkan role
-    if (role === "super_admin") {
-      navigate("/superadmin");
-    } else if (role === "admin") {
-      navigate("/dashboard");
-    } else {
-      navigate("/home");
+      // simpan data user dan token ke localStorage
+      localStorage.setItem("user", JSON.stringify({ name: data.user.nama, email: data.user.email, role: data.user.role }));
+      localStorage.setItem("token", data.token);
+
+      // pindah halaman berdasarkan role
+      if (data.user.role === "super_admin") {
+        navigate("/superadmin");
+      } else if (data.user.role === "admin") {
+        navigate("/dashboard");
+      } else {
+        navigate("/home");
+      }
+    } catch (error) {
+      alert("Terjadi kesalahan saat login");
     }
   };
 

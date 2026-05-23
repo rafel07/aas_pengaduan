@@ -8,62 +8,53 @@ export interface User {
   date: string;
 }
 
-const defaultUsers: User[] = [
-  {
-    id: "1",
-    name: "Admin Pengaduan",
-    email: "admin@example.com",
-    role: "admin",
-    date: "10 Mei 2026",
-  },
-  {
-    id: "2",
-    name: "Super Admin",
-    email: "superadmin@example.com",
-    role: "super_admin",
-    date: "10 Mei 2026",
-  },
-  {
-    id: "3",
-    name: "Budi Santoso",
-    email: "budi@example.com",
-    role: "user",
-    date: "11 Mei 2026",
-  }
-];
-
 export function useUsers() {
   const [users, setUsers] = useState<User[]>([]);
 
-  useEffect(() => {
-    const saved = localStorage.getItem("users_data");
-    if (saved) {
-      setUsers(JSON.parse(saved));
-    } else {
-      setUsers(defaultUsers);
-      localStorage.setItem("users_data", JSON.stringify(defaultUsers));
+  const fetchUsers = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      const response = await fetch("http://localhost:5000/api/auth/users", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setUsers(data);
+      }
+    } catch (error) {
+      console.error("Gagal mengambil data pengguna", error);
     }
-  }, []);
-
-  const addUser = (user: Omit<User, "id" | "date" | "role">, role: string = "user") => {
-    const saved = localStorage.getItem("users_data");
-    let currentUsers = saved ? JSON.parse(saved) : defaultUsers;
-    
-    const newUser: User = {
-      ...user,
-      id: Date.now().toString(),
-      role,
-      date: new Date().toLocaleDateString("id-ID", {
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }),
-    };
-
-    const updated = [newUser, ...currentUsers];
-    setUsers(updated);
-    localStorage.setItem("users_data", JSON.stringify(updated));
   };
 
-  return { users, addUser };
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const addUser = async (user: Omit<User, "id" | "date" | "role">, role: string = "user") => {
+    // Registrasi via backend sudah ada di Register.tsx.
+    // Jika Super Admin bisa tambah user dari dashboard, bisa gunakan endpoint register.
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nama: user.name, email: user.email, password: "password123" }), // Default password for manually added users
+      });
+      if (response.ok) {
+        fetchUsers();
+      } else {
+        alert("Gagal menambah pengguna");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return { users, addUser, refreshUsers: fetchUsers };
 }

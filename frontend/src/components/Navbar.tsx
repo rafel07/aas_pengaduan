@@ -68,7 +68,7 @@ export default function Navbar({ showLogin = true }: NavbarProps) {
 
           {/* LOGO */}
           <Link
-            to="/"
+            to="/Home"
             className="flex items-center gap-2"
           >
 

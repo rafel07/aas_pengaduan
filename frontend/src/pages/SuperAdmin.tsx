@@ -173,14 +173,12 @@ export default function SuperAdmin() {
 
           <div className="flex items-center gap-4">
 
-            <img
-              src="https://i.pravatar.cc/100"
-              alt="admin"
-              className="w-14 h-14 rounded-full object-cover"
-            />
+            <div className="w-14 h-14 rounded-full bg-cyan-400 flex items-center justify-center text-[#031B63] text-2xl font-black flex-shrink-0">
+              {(currentUser?.name || "A")[0].toUpperCase()}
+            </div>
 
-            <div>
-              <h1 className="font-semibold text-lg">
+            <div className="overflow-hidden">
+              <h1 className="font-semibold text-lg truncate">
                 {currentUser?.name || "Admin"}
               </h1>
 
@@ -310,37 +308,29 @@ export default function SuperAdmin() {
 
               <div className="space-y-7">
 
-                <div className="flex gap-4">
+                {reports.slice(0, 5).map((report, idx) => (
+                  <div className="flex gap-4" key={idx}>
+                    <div className={`w-4 h-4 rounded-full mt-2 ${
+                      report.status === 'Selesai' ? 'bg-green-400' :
+                      report.status === 'Diproses' ? 'bg-yellow-400' :
+                      'bg-red-400'
+                    }`}></div>
 
-                  <div className="w-4 h-4 rounded-full bg-cyan-400 mt-2"></div>
+                    <div>
+                      <h2 className="font-semibold text-gray-800">
+                        {report.title}
+                      </h2>
 
-                  <div>
-                    <h2 className="font-semibold text-gray-800">
-                      Laporan baru masuk
-                    </h2>
-
-                    <p className="text-gray-500 text-sm mt-1">
-                      5 menit yang lalu
-                    </p>
+                      <p className="text-gray-500 text-sm mt-1">
+                        Kategori: {report.category} - Status: {report.status}
+                      </p>
+                    </div>
                   </div>
-
-                </div>
-
-                <div className="flex gap-4">
-
-                  <div className="w-4 h-4 rounded-full bg-yellow-400 mt-2"></div>
-
-                  <div>
-                    <h2 className="font-semibold text-gray-800">
-                      Verifikasi laporan dilakukan
-                    </h2>
-
-                    <p className="text-gray-500 text-sm mt-1">
-                      30 menit yang lalu
-                    </p>
-                  </div>
-
-                </div>
+                ))}
+                
+                {reports.length === 0 && (
+                  <p className="text-gray-500 italic">Belum ada laporan.</p>
+                )}
 
               </div>
 

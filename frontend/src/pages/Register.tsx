@@ -4,7 +4,6 @@
 
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useUsers } from "../hooks/useUsers";
 
 import {
   HiOutlineUser,
@@ -16,23 +15,36 @@ import {
 export default function Register() {
 
   const navigate = useNavigate();
-  const { addUser } = useUsers();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // simpan data ke daftar user
-    addUser({ name, email });
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nama: name, email, password }),
+      });
 
-    // simpan data user dummy ke localStorage untuk session
-    localStorage.setItem("user", JSON.stringify({ name, email, role: "user" }));
+      const data = await response.json();
 
-    // pindah ke halaman home (langsung login)
-    navigate("/home");
+      if (!response.ok) {
+        alert(data.message || "Register gagal");
+        return;
+      }
+
+      alert("Registrasi berhasil, silakan login!");
+      // pindah ke halaman login
+      navigate("/login");
+    } catch (error) {
+      alert("Terjadi kesalahan saat register");
+    }
   };
 
   return (

@@ -5,7 +5,7 @@ import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import HowItWorks from "../components/HowItWorks";
 import FeaturesSection from "../components/FeaturesSection";
-import CtaBanner from "../components/CtaBanner";
+import ReportFormSection from "../components/ReportFormSection";
 
 export default function Home() {
   return (
@@ -23,8 +23,9 @@ export default function Home() {
       {/* HOW IT WORKS */}
       <HowItWorks />
 
-      {/* CTA */}
-      <CtaBanner />
+      {/* LAPORAN FORM */}
+      <ReportFormSection />
+
 
       {/* FOOTER */}
       <Footer />
